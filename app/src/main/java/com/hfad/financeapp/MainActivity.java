@@ -31,14 +31,26 @@ public class MainActivity extends AppCompatActivity {
         pieChartView = (PieChartView) findViewById(R.id.chart);
 
         // создаем данные
-        pieData.add(new SliceValue(15, Color.BLUE));
-        pieData.add(new SliceValue(25, Color.GRAY));
-        pieData.add(new SliceValue(10, Color.RED));
-        pieData.add(new SliceValue(60, Color.MAGENTA));
+        pieData.add(new SliceValue(15, Color.BLUE).setLabel("4551"));
+        pieData.add(new SliceValue(25, Color.GRAY).setLabel("4556"));
+        pieData.add(new SliceValue(10, Color.RED).setLabel("455"));
+        pieData.add(new SliceValue(60, Color.MAGENTA).setLabel("54561"));
 
         // добавляем данные
         PieChartData pieChartData = new PieChartData(pieData);
 
+        // показ подписей и размер текста
+        pieChartData.setHasLabels(true).setValueLabelTextSize(20);
+
+        // надпись в центре
+        pieChartData
+                .setHasCenterCircle(true)                                         // включаем текст в центре
+                .setCenterText1("Sales in million")                              // задаем текст
+                .setCenterText1FontSize(20)                                      // размер
+                .setCenterText1Color(Color.parseColor("#0097A7"));     // цвет
+
+
+        // приаязываем данные к диагрмме на макете
         pieChartView.setPieChartData(pieChartData);
 
 
