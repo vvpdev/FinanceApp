@@ -3,4 +3,10 @@
     <string name="moveToChart">к диаграмме</string>
     <string name="createCaegory">создать категорию</string>
     <string name="allCategory">все категории</string>
+
+    <string name="new_Category">Новая категория</string>
+    <string name="enter_name">введите название</string>
+    <string name="enter_value">введите значение</string>
+
+    <string name="categoies_null">добавьте категории</string>
 </resources>
