@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // слушатель долгого нажатия на item
+        // слушатель нажатия на item
         listAllCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
