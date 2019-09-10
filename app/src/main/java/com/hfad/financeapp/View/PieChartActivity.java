@@ -1,10 +1,12 @@
-package com.hfad.financeapp;
+package com.hfad.financeapp.View;
 
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+
+import com.hfad.financeapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
 
-public class PieChart extends AppCompatActivity {
+public class PieChartActivity extends AppCompatActivity {
 
     // для цветов
     int r;

@@ -1,4 +1,4 @@
-package com.hfad.financeapp;
+package com.hfad.financeapp.Model;
 
 
     // простой класс для объектов - категорий
@@ -10,17 +10,17 @@ public class Category {
         private int value;
 
         // конструктор объектов
-        Category (String nameCategory, int value){
+        public Category(String nameCategory, int value){
             this.nameCategory = nameCategory;
             this.value = value;
         }
 
 
-    String getNameCategory() {
+    public String getNameCategory() {
         return nameCategory;
     }
 
-    int getValue() {
+    public int getValue() {
         return value;
     }
 

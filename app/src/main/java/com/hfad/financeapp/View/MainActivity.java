@@ -1,13 +1,10 @@
-package com.hfad.financeapp;
+package com.hfad.financeapp.View;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +14,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.hfad.financeapp.Model.Category;
+import com.hfad.financeapp.R;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.view.PieChartView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.moveToChart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent moveToChart = new Intent (MainActivity.this, PieChart.class);
+                Intent moveToChart = new Intent (MainActivity.this, PieChartActivity.class);
                 startActivity(moveToChart);
             }
         });
@@ -78,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 // находим элементы для ввода данных
                 final EditText inputNameCategory = dialogView.findViewById(R.id.input_NameCategory);
                 final EditText inputValueCategory = dialogView.findViewById(R.id.input_ValueCategory);
+
 
                 builder.setTitle("Новая категория")
                         .setCancelable(false)       // ?????
@@ -154,5 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+
 
 }
