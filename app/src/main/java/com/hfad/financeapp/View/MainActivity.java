@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,26 +13,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.hfad.financeapp.Model.Category;
 import com.hfad.financeapp.R;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-
-import lecho.lib.hellocharts.model.PieChartData;
-import lecho.lib.hellocharts.model.SliceValue;
-import lecho.lib.hellocharts.view.PieChartView;
 
 public class MainActivity extends AppCompatActivity {
 
     final Context context = this;   // контекст этой активити
 
     // массив для категорий
-  public static ArrayList <Category> arrayCategories = new ArrayList<>();
+    public static ArrayList <Category> arrayCategories = new ArrayList<>();
 
     // строковый массив для отображения в ListView
     ArrayList <String> arrayCategoriesString = new ArrayList<>();

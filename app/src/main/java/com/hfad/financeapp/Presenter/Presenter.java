@@ -7,6 +7,12 @@ package com.hfad.financeapp.Presenter;
 public class Presenter {
 
 
+    // конструктор
+    public Presenter (){
+
+
+    }
+
 
 
 
