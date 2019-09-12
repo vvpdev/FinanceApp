@@ -14,20 +14,13 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.hfad.financeapp.Model.Category;
+import com.hfad.financeapp.MainInterface;
+import com.hfad.financeapp.Presenter.Presenter;
 import com.hfad.financeapp.R;
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainInterface.mvpView {
 
     final Context context = this;   // контекст этой активити
-
-    // массив для категорий
-    public static ArrayList <Category> arrayCategories = new ArrayList<>();
-
-    // строковый массив для отображения в ListView
-    ArrayList <String> arrayCategoriesString = new ArrayList<>();
 
     // адаптер
     ArrayAdapter <String> adapter;
@@ -35,16 +28,21 @@ public class MainActivity extends AppCompatActivity {
     //ListView
     ListView listAllCategory;
 
+    private MainInterface.mvpPresenter presenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        presenter = new Presenter(this);
+
         setTitle("Расходы");
 
         // ListView для отображения всех добавленных категорий
         listAllCategory = findViewById(R.id.listAllCategory);
+
 
 
         // кнопка "к диаграмме"
@@ -78,10 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 final EditText inputNameCategory = dialogView.findViewById(R.id.input_NameCategory);
                 final EditText inputValueCategory = dialogView.findViewById(R.id.input_ValueCategory);
 
-
                 builder.setTitle("Новая категория")
                         .setCancelable(false)       // ?????
-
                         .setNegativeButton("отмена",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
@@ -93,10 +89,13 @@ public class MainActivity extends AppCompatActivity {
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
 
-                                        // добавляем новую категорию
-                                        arrayCategories.add(new Category(inputNameCategory.getText().toString(), Integer.parseInt(inputValueCategory.getText().toString())));
-                                        arrayCategoriesString.add(inputNameCategory.getText().toString());
+                                        // передаем данные презентеру
+                                        presenter.sendDataToModel(
+                                                inputNameCategory.getText().toString(),
+                                                Integer.parseInt(inputValueCategory.getText().toString()));
 
+                                        // обновить listView
+                                        adapter.notifyDataSetChanged();
                                     }
                                 });
 
@@ -105,17 +104,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
-
-        // адаптер
-        adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                arrayCategoriesString
-        );
-
-        listAllCategory.setAdapter(adapter);
-
 
 
         // слушатель нажатия на item
@@ -130,9 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 builderDelete.setPositiveButton("да", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
 
-                        // удаление айтема
-                        arrayCategoriesString.remove(position);
-                        arrayCategories.remove(position);
+                        presenter.onClickRemoveCategory(position);
 
                         // обновить listView
                         adapter.notifyDataSetChanged();
@@ -152,8 +138,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        // показ ListView
+        onShowListCategory();
 }
 
 
+
+    @Override
+    public void onShowListCategory() {
+
+        adapter = new ArrayAdapter<>(
+
+                this,
+
+                android.R.layout.simple_list_item_1,
+
+                presenter.returnArrayStringCategory()
+        );
+
+        listAllCategory.setAdapter(adapter);
+
+    }
 }
