@@ -1,34 +1,37 @@
 package com.hfad.financeapp.View;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 
-import com.hfad.financeapp.MainInterface;
-import com.hfad.financeapp.Presenter.Presenter;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.hfad.financeapp.R;
+import com.hfad.financeapp.Repository.CategoryClass;
+import com.hfad.financeapp.View.Adapters.AdapterAllCategories;
+import com.hfad.financeapp.View.Adapters.RecyclerItemClickListener;
 
-public class MainActivity extends AppCompatActivity implements MainInterface.mvpView {
+import java.util.ArrayList;
 
-    final Context context = this;   // контекст этой активити
 
-    // адаптер
-    ArrayAdapter <String> adapter;
+        // главная активити
 
-    //ListView
-    ListView listAllCategory;
+public class MainActivity extends AppCompatActivity {
 
-    private MainInterface.mvpPresenter presenter;
+    Toolbar toolbarApp;
+    LinearLayoutManager layoutManager;
+    RecyclerView recyclerViewAllCategory;
+    public static ArrayList <CategoryClass> arrayCategory = new ArrayList<>();
+    public static Context context;
 
 
     @Override
@@ -36,52 +39,72 @@ public class MainActivity extends AppCompatActivity implements MainInterface.mvp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        presenter = new Presenter(this);
+        toolbarApp = findViewById(R.id.toolbarApp);
+        setSupportActionBar(toolbarApp);
 
-        setTitle("Расходы");
+        setTitle(R.string.main_activity);
 
-        // ListView для отображения всех добавленных категорий
-        listAllCategory = findViewById(R.id.listAllCategory);
+        context = this;
 
-
-
-        // кнопка "к диаграмме"
-        findViewById(R.id.moveToChart).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent moveToChart = new Intent (MainActivity.this, PieChartActivity.class);
-                startActivity(moveToChart);
-            }
-        });
+        recyclerViewAllCategory = findViewById(R.id.recyclerViewAllCategories);
 
 
-        // кнопка "создать категорию"
-        findViewById(R.id.createCategory).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        // первоначальная настройка RecyclerView
+        initRecyclreViewCategory();
 
-                // раздуватель нового макета
-                LayoutInflater inflater = LayoutInflater.from(context);
+        // задаем слушатель
+        onSetListener();
+    }
 
-                // новый View
-                @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.alert_dialog_layout, null);
 
-                // всплывающее окно
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-                // задаем вью макета к билдеру
-                builder.setView(dialogView);
+    void initRecyclreViewCategory(){
 
-                // находим элементы для ввода данных
-                final EditText inputNameCategory = dialogView.findViewById(R.id.input_NameCategory);
-                final EditText inputValueCategory = dialogView.findViewById(R.id.input_ValueCategory);
+        // инициилизируем менеджера макета
+        layoutManager = new LinearLayoutManager(context);
 
-                builder.setTitle("Новая категория")
+        // создаем объект класса адаптера
+        final AdapterAllCategories adapterAllCategories = new AdapterAllCategories(context, arrayCategory);
+
+        recyclerViewAllCategory.setLayoutManager(layoutManager);
+
+        fillArrayCategory();
+
+        // задаем адаптер для RecyclerView
+        recyclerViewAllCategory.setAdapter(adapterAllCategories);
+    }
+
+
+
+    void onSetListener (){
+        recyclerViewAllCategory.addOnItemTouchListener(
+
+                new RecyclerItemClickListener(context, recyclerViewAllCategory, new RecyclerItemClickListener.OnItemClickListener() {
+
+                   // обычный клик
+                    @Override
+                    public void onItemClick(View view, final int position) {
+
+                        // раздуватель нового макета
+                        LayoutInflater inflater = LayoutInflater.from(MainActivity.context);
+
+                        View dialogView = inflater.inflate(R.layout.alert_dialog_layout, null);
+
+                        // всплывающее окно
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.context);
+
+                        // задаем вью макета к билдеру
+                       builder.setView(dialogView);
+
+                        // находим элементы для ввода данных
+                        final EditText inputValue = dialogView.findViewById(R.id.inputValue);
+
+                        builder.setTitle(R.string.new_cost)
                         .setCancelable(false)       // ?????
                         .setNegativeButton("отмена",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                       dialog.cancel();
+                                        dialog.cancel();
                                     }
                                 })
 
@@ -89,74 +112,44 @@ public class MainActivity extends AppCompatActivity implements MainInterface.mvp
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
 
-                                        // передаем данные презентеру
-                                        presenter.sendDataToModel(
-                                                inputNameCategory.getText().toString(),
-                                                Integer.parseInt(inputValueCategory.getText().toString()));
+                                        // тут запись данных с ввода
+                                        arrayCategory.get(position).addValueToArray(Integer.parseInt(inputValue.getText().toString()));
 
-                                        // обновить listView
-                                        adapter.notifyDataSetChanged();
+                                        // обновляем RecyclerView
+                                        recyclerViewAllCategory.getAdapter().notifyDataSetChanged();
                                     }
                                 });
 
                 AlertDialog alert = builder.create();
                 alert.show();
-            }
 
-        });
+                 }
 
 
-        // слушатель нажатия на item
-        listAllCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                    // долгий клик
+                    @Override
+                    public void onLongItemClick(View view, int position) {
 
-                // всплывающее окно
-                AlertDialog.Builder builderDelete = new AlertDialog.Builder(context);
 
-                builderDelete.setTitle("Удалить категорию?");  // заголовок
-                builderDelete.setPositiveButton("да", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int arg1) {
 
-                        presenter.onClickRemoveCategory(position);
-
-                        // обновить listView
-                        adapter.notifyDataSetChanged();
                     }
-                });
-                builderDelete.setNegativeButton("нет", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int arg1) {
+                })
 
-                        dialog.cancel();
-                    }
-                });
-
-                // показать сообщение
-                AlertDialog alert = builderDelete.create();
-                alert.show();
-
-            }
-        });
-
-        // показ ListView
-        onShowListCategory();
-}
-
-
-
-    @Override
-    public void onShowListCategory() {
-
-        adapter = new ArrayAdapter<>(
-
-                this,
-
-                android.R.layout.simple_list_item_1,
-
-                presenter.returnArrayStringCategory()
         );
 
-        listAllCategory.setAdapter(adapter);
-
     }
+
+
+
+
+
+
+    public void fillArrayCategory(){
+        arrayCategory.add(new CategoryClass("другое"));
+        arrayCategory.add(new CategoryClass("хавчик"));
+        arrayCategory.add(new CategoryClass("сиги"));
+        arrayCategory.add(new CategoryClass("пивчер"));
+    }
+
+
 }

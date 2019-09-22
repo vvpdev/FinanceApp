@@ -1,12 +1,21 @@
 <resources>
     <string name="app_name">FinanceApp</string>
-    <string name="moveToChart">к диаграмме</string>
-    <string name="createCaegory">создать категорию</string>
-    <string name="allCategory">все категории</string>
+    <string name="main_activity">Финансы</string>
+
+    <string name="all_budget">Бюджет</string>
+
+    <string name="addCosts">новый расход</string>
+    <string name="addProfit">+доход</string>
 
     <string name="new_Category">Новая категория</string>
     <string name="enter_name">введите название</string>
     <string name="enter_value">введите значение</string>
 
-    <string name="categoies_null">добавьте категории</string>
+    <string name="textCategory">Категории</string>
+
+    <string name="new_cost">Новый расход</string>
+
+    <string name="currency">руб</string>
+
+
 </resources>

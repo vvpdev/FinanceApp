@@ -11,14 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <activity android:name=".View.PieChartActivity"
-            android:parentActivityName=".View.MainActivity"
-            android:launchMode="singleTop">
-        </activity>
-
-        <activity android:name=".View.MainActivity"
-            android:launchMode="singleTop">
+        <activity android:name=".View.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
